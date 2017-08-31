@@ -97,7 +97,12 @@ def split(node, max_depth, min_size, depth):
         node['right'] = get_split(right)
         split(node['right'], max_depth, min_size, depth+1)
 
-# build tree by creating the root node and use split() to recursively build
+# build decision tree by creating the root node and use split() to recursively build
+def build_tree(train, max_depth, min_size):
+    root = get_split(train)
+    split(root, max_depth, min_size, 1)
+    return root
+
 
 # test datasplitting process with a contirved dataset
 dataset = [[2.771244718,1.784783929,0],
