@@ -4,7 +4,31 @@ Created on Thu Aug 31 11:33:21 2017
 
 @author: nellac77
 """
-import csv
+from csv import reader
+
+# Split dataset based on an attribute and its value
+def test_split(index, value, dataset):
+    left, right = list(), list()
+    for row in dataset:
+        if row[index] < value:
+            left.append(row)
+        else:
+            right.append(row)
+    # note: right contains all rows with value at index
+    # greater than or equal to split value
+    return left, right
+
+# Choose best split point for the dataset via exhaustive, greedy algorithm
+def get_split(dataset):
+    class_values = list(set(row[-1] for row in dataset))
+    b_index, b_value, b_score, b_groups = 999, 999, 999, None
+    for index in range(len(dataset[0])-1):
+        for row in dataset:
+            groups = test_split((index), row[index], dataset)
+            gini = gini_index(groups, class_values)
+            if gini < b_score:
+                b_index, b_value, b_score, b_groups = index, row[index], gini, groups
+    return {'index':b_index, 'value':b_value, 'score':b_score, 'groups':b_groups}
 
 # Calculate the Gini index (cost function used to evaluate splits)
 def gini_index(groups, classes):
@@ -32,32 +56,17 @@ def gini_index(groups, classes):
 # Best case, 0.0
 #print (gini_index([[[1, 0], [1, 0]], [[1, 1], [1, 1]]], [0, 1]))
 
-# Split dataset based on an attribute and its value
-def test_split(index, value, dataset):
-    left, right = list(), list()
-    for row in dataset:
-        if row[index] < value:
-            left.append(row)
-        else:
-            right.append(row)
-    # note: right contains all rows with value at index
-    # greater than or equal to split value
-    return left, right
-
-# Choose best split point for the dataset via exhaustive, greedy algorithm
-def get_split(dataset):
-    class_values = list(set(row[-1] for row in dataset))
-    b_index, b_value, b_score, b_groups = 999, 999, 999, None
-    for index in range(len(dataset[0])-1):
-        for row in dataset:
-            groups = test_split((index), row[index], dataset)
-            gini = gini_index(groups, class_values)
-            if gini < b_score:
-                b_index, b_value, b_score, b_groups = index, row[index], gini, groups
-    return {'index ':b_index, 'value ':b_value, 'score ':b_score, 'groups ':b_groups}
-
 # test datasplitting process with a contirved dataset
-with open('contrived_dataset','rb') as f:
-    reader = csv.DictReader(f)
-    dataset = list(reader)
+dataset = [[2.771244718,1.784783929,0],
+	[1.728571309,1.169761413,0],
+	[3.678319846,2.81281357,0],
+	[3.961043357,2.61995032,0],
+	[2.999208922,2.209014212,0],
+	[7.497545867,3.162953546,1],
+	[9.00220326,3.339047188,1],
+	[7.444542326,0.476683375,1],
+	[10.12493903,3.234550982,1],
+	[6.642287351,3.319983761,1]]
 
+split = get_split(dataset)
+print('Split: [X%d < %.3f]' % ((split['index']+1), split['value']))
