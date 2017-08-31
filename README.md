@@ -1,6 +1,6 @@
 # pyCART
 
-This is an implementation of a Classification and Rregression Tree (CART) algorithm in Python.
+This is an implementation of a Classification and Regression Tree (CART) algorithm in Python.
 
 Decision trees are pretty cool, in that they are fairly simple and are a powerful prediction method. This immplementaion will calculate and evaluate potential split points in a training dataset, arrange the splits into a decision tree structure, and then apply the classification and regression tree algorithm to a realworld problem using the Banknote dataset (determining authenticity based on measures taken from photographs).
 
