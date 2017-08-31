@@ -4,10 +4,29 @@ Created on Thu Aug 31 11:33:21 2017
 
 @author: nellac77
 """
+from random import seed
+from random import randrange
 from csv import reader
 
 '''
-This first section will be to test then determine the splits in a given 
+This section will be for loading csv files, converting string columns to float,
+splitting datasets into k folds, determing an accuracy percentage, and alorithm
+evaluation by cross-validation split.
+'''
+# load a csv file
+def load_csv(filename):
+    f = open(filename, 'rb')
+    lines = reader(f)
+    dataset = list(lines)
+    return dataset
+
+# convert string column to float
+def str_column_to_float(dataset, column):
+    for row in dataset:
+        row[column] = float(row[column].strip())
+
+'''
+This section will be to test then determine the splits in a given 
 dataset. Then the Gini index will be calculated.
 '''
 
@@ -136,5 +155,13 @@ dataset = [[2.771244718,1.784783929,0],
 	[7.444542326,0.476683375,1],
 	[10.12493903,3.234550982,1],
 	[6.642287351,3.319983761,1]]
-tree = build_tree(dataset, 3, 1)
-print_tree(tree)
+
+# look at the decision tree
+#tree = build_tree(dataset, 1, 1)
+#print_tree(tree)
+
+#predict with a decision stump
+stump = {'index': 0, 'right': 1, 'value': 6.642287351, 'left': 0}
+for row in dataset:
+    prediction = predict(stump, row)
+    print('Expected=%d, Got=%d' % (row[-1], prediction))
