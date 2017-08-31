@@ -111,6 +111,19 @@ def print_tree(node, depth=0):
         print_tree(node['right'], depth+1)
     else:
         print('%s[%s]' % ((depth*' ', node)))
+        
+# make prediction with the decision tree
+def predict(node, row):
+    if row[node['index']] < node['value']:
+        if isinstance(node['left'], dict):
+            return predict(node['left'], row)
+        else:
+            return node['left']
+    else:
+         if isinstance(node['right'], dict):
+             return predict(node['right'], row)
+         else:
+             return node['right']
 
 # test datasplitting process with a contirved dataset
 dataset = [[2.771244718,1.784783929,0],
@@ -123,6 +136,5 @@ dataset = [[2.771244718,1.784783929,0],
 	[7.444542326,0.476683375,1],
 	[10.12493903,3.234550982,1],
 	[6.642287351,3.319983761,1]]
-tree = build_tree(dataset, 1, 1)
+tree = build_tree(dataset, 3, 1)
 print_tree(tree)
-
