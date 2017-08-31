@@ -23,18 +23,6 @@ def test_split(index, value, dataset):
     # greater than or equal to split value
     return left, right
 
-# Choose best split point for the dataset via exhaustive, greedy algorithm
-def get_split(dataset):
-    class_values = list(set(row[-1] for row in dataset))
-    b_index, b_value, b_score, b_groups = 999, 999, 999, None
-    for index in range(len(dataset[0])-1):
-        for row in dataset:
-            groups = test_split((index), row[index], dataset)
-            gini = gini_index(groups, class_values)
-            if gini < b_score:
-                b_index, b_value, b_score, b_groups = index, row[index], gini, groups
-    return {'index':b_index, 'value':b_value, 'score':b_score, 'groups':b_groups}
-
 # Calculate the Gini index (cost function used to evaluate splits)
 def gini_index(groups, classes):
     # count all samples at a split point
@@ -60,6 +48,18 @@ def gini_index(groups, classes):
 #print (gini_index([[[1, 1], [1, 0]], [[1, 1], [1, 0]]], [0, 1]))
 # Best case, 0.0
 #print (gini_index([[[1, 0], [1, 0]], [[1, 1], [1, 1]]], [0, 1]))
+
+# Choose best split point for the dataset via exhaustive, greedy algorithm
+def get_split(dataset):
+    class_values = list(set(row[-1] for row in dataset))
+    b_index, b_value, b_score, b_groups = 999, 999, 999, None
+    for index in range(len(dataset[0])-1):
+        for row in dataset:
+            groups = test_split((index), row[index], dataset)
+            gini = gini_index(groups, class_values)
+            if gini < b_score:
+                b_index, b_value, b_score, b_groups = index, row[index], gini, groups
+    return {'index':b_index, 'value':b_value, 'score':b_score, 'groups':b_groups}
 
 '''
 The following section will be building the tree.
@@ -123,6 +123,6 @@ dataset = [[2.771244718,1.784783929,0],
 	[7.444542326,0.476683375,1],
 	[10.12493903,3.234550982,1],
 	[6.642287351,3.319983761,1]]
+tree = build_tree(dataset, 1, 1)
+print_tree(tree)
 
-split = get_split(dataset)
-print('Split: [X%d < %.3f]' % ((split['index']+1), split['value']))
