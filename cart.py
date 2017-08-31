@@ -6,6 +6,11 @@ Created on Thu Aug 31 11:33:21 2017
 """
 from csv import reader
 
+'''
+This first section will be to test then determine the splits in a given 
+dataset. Then the Gini index will be calculated.
+'''
+
 # Split dataset based on an attribute and its value
 def test_split(index, value, dataset):
     left, right = list(), list()
@@ -55,6 +60,44 @@ def gini_index(groups, classes):
 #print (gini_index([[[1, 1], [1, 0]], [[1, 1], [1, 0]]], [0, 1]))
 # Best case, 0.0
 #print (gini_index([[[1, 0], [1, 0]], [[1, 1], [1, 1]]], [0, 1]))
+
+'''
+The following section will be building the tree.
+'''
+
+# create the tree's terminal node (point where we know to stop building) value
+def to_terminal(group):
+    # select a class value for a group of rows
+    outcomes = [row[-1] for row in group]
+    # return most common output valuein list of rows
+    return max(set(outcomes), key=outcomes.count)
+
+# create child splits for a node, or make a terminal node
+def split(node, max_depth, min_size, depth):
+    left, right = node['groups']
+    del(node['groups'])
+    # check for a no-split
+    if not left or not right:
+        node['left'] = node['right'] = to_terminal(left+right)
+        return
+    # check for max deoth
+    if depth >= max_depth:
+        node['left'], node['right'] = to_terminal(left), to_terminal(right)
+        return
+    # process the left child
+    if len(left) <= to_terminal(left):
+        node['left'] = to_terminal(left)
+    else:
+        node['left'] = get_split(left)
+        split(node['left'], max_depth, min_size, depth+1)
+    # process the right child
+    if len(right) <= to_terminal(right):
+        node['right'] = to_terminal(right)
+    else:
+        node['right'] = get_split(right)
+        split(node['right'], max_depth, min_size, depth+1)
+
+# build tree by creating the root node and use split() to recursively build
 
 # test datasplitting process with a contirved dataset
 dataset = [[2.771244718,1.784783929,0],
