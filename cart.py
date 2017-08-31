@@ -103,6 +103,14 @@ def build_tree(train, max_depth, min_size):
     split(root, max_depth, min_size, 1)
     return root
 
+# print the decision tree
+def print_tree(node, depth=0):
+    if isinstance(node, dict):
+        print('%s[X%d < %.3f]' % ((depth*' ', (node['index']+1), node['value'])))
+        print_tree(node['left'], depth+1)
+        print_tree(node['right'], depth+1)
+    else:
+        print('%s[%s]' % ((depth*' ', node)))
 
 # test datasplitting process with a contirved dataset
 dataset = [[2.771244718,1.784783929,0],
