@@ -64,9 +64,6 @@ def evaluate_algorithm(dataset, algorithm, n_folds, *args):
         accuarcay = accuracy_metric(actual, predicted)
         scores.append(accuarcay)
     return scores
-        
-        
-        
 
 '''
 This section will be to test then determine the splits in a given 
@@ -186,6 +183,15 @@ def predict(node, row):
              return predict(node['right'], row)
          else:
              return node['right']
+         
+# classification and regression algorithm
+def decision_tree(train, test, max_depth, min_size):
+    tree = build_tree(train, max_depth, min_size)
+    predictions = list()
+    for row in test:
+        prediction = predict(tree, row)
+        predictions.append(prediction)
+    return(predictions)
 
 # test datasplitting process with a contirved dataset
 dataset = [[2.771244718,1.784783929,0],
