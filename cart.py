@@ -4,6 +4,8 @@ Created on Thu Aug 31 11:33:21 2017
 
 @author: nellac77
 """
+import csv
+
 # Calculate the Gini index (cost function used to evaluate splits)
 def gini_index(groups, classes):
     # count all samples at a split point
@@ -53,3 +55,9 @@ def get_split(dataset):
             if gini < b_score:
                 b_index, b_value, b_score, b_groups = index, row[index], gini, groups
     return {'index ':b_index, 'value ':b_value, 'score ':b_score, 'groups ':b_groups}
+
+# test datasplitting process with a contirved dataset
+with open('contrived_dataset','rb') as f:
+    reader = csv.DictReader(f)
+    dataset = list(reader)
+
