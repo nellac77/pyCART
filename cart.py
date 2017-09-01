@@ -6,7 +6,7 @@ Created on Thu Aug 31 11:33:21 2017
 """
 from random import seed
 from random import randrange
-from csv import reader
+from unicodecsv import reader
 
 '''
 This section will be for loading csv files, converting string columns to float,
@@ -15,7 +15,7 @@ evaluation by cross-validation split.
 '''
 # load a csv file
 def load_csv(filename):
-    f = open(filename, 'rb')
+    f = open(filename, "rb")
     lines = reader(f)
     dataset = list(lines)
     return dataset
@@ -193,6 +193,23 @@ def decision_tree(train, test, max_depth, min_size):
         predictions.append(prediction)
     return(predictions)
 
+#test CART on banknote dataset
+seed(1)
+# load and prepare data
+filename = 'data_banknote_authentication.csv'
+dataset = load_csv(filename)
+# convert string attributes to integers
+for i in range(len(dataset[0])):
+	str_column_to_float(dataset, i)
+# evaluate algorithm
+n_folds = 5
+max_depth = 5
+min_size = 10
+scores = evaluate_algorithm(dataset, decision_tree, n_folds, max_depth, min_size)
+print('Scores: %s' % scores)
+print('Mean Accuracy: %.3f%%' % (sum(scores)/float(len(scores))))
+
+'''
 # test datasplitting process with a contirved dataset
 dataset = [[2.771244718,1.784783929,0],
 	[1.728571309,1.169761413,0],
@@ -214,3 +231,4 @@ stump = {'index': 0, 'right': 1, 'value': 6.642287351, 'left': 0}
 for row in dataset:
     prediction = predict(stump, row)
     print('Expected=%d, Got=%d' % (row[-1], prediction))
+'''
